@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">GitNetwork</string>
+    <string name="users">Пользователи</string>
+    <string name="default_login_field">{LOGIN}</string>
+    <string name="image_content_description">Github user image</string>
+    <string name="default_name_field">{NAME}</string>
+    <string name="info">Информация</string>
+    <string name="bio">{BIO}</string>
+    <string name="default_location_field">{LOCATION}</string>
+    <string name="subs_title">Подписчики</string>
+    <string name="default_company_field">{COMPANY}</string>
+    <string name="default_email_field">{EMAIL}</string>
+    <string name="default_blog_field">{BLOG}</string>
+</resources>
