@@ -6,6 +6,6 @@ object Constant {
     const val IMAGE_URL = "https://avatars2.githubusercontent.com"
     const val POSITION = "POSITION"
     const val LOGIN = "LOGIN"
-    const val TOKEN = "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"
+    const val TOKEN = ""
     const val REQUEST_DELAY = 50L
 }
