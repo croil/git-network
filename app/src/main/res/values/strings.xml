@@ -13,4 +13,5 @@
     <string name="default_blog_field">{BLOG}</string>
     <string name="default_sub_field">{count} подписчиков</string>
     <string name="default_repo_field">{count} репозиториев</string>
+    <string name="github_api">Ожидается доступ к Github API</string>
 </resources>

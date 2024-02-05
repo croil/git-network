@@ -5,8 +5,12 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
+import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import org.geo.gitnetwork.databinding.ActivityMainBinding
 import org.geo.gitnetwork.model.User
 import org.geo.gitnetwork.model.UserItem
@@ -95,6 +99,20 @@ class MainActivity : BaseActivity() {
 
         override fun refreshHeader(user: UserItem, subs: String) {
             TODO()
+        }
+
+        override suspend fun retry(times : Int) {
+            withContext(Dispatchers.Main) {
+                binding.delayed.visibility = View.VISIBLE
+                binding.delayTime.visibility = View.VISIBLE
+                repeat(times) {
+                    binding.delayTime.text =
+                        String.format("%s / %s", it.toString(), times.toString())
+                    delay(1000)
+                }
+                binding.delayTime.visibility = View.GONE
+                binding.delayed.visibility = View.GONE
+            }
         }
     }
 }

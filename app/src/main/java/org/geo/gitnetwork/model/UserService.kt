@@ -10,6 +10,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.geo.gitnetwork.R
+import org.geo.gitnetwork.exception.BackendException
+import org.geo.gitnetwork.exception.ConnectionException
+import org.geo.gitnetwork.exception.ParseBackendException
 import org.geo.gitnetwork.retrofit.RetrofitClient
 import org.geo.gitnetwork.retrofit.RetrofitUserSource
 import org.geo.gitnetwork.util.Constant
@@ -23,7 +26,6 @@ class UserService : Service() {
     private val listeners = mutableSetOf<UserListener>()
     private val userState = ServiceState()
     private val followerState = ServiceState()
-    private var mainUser: UserItem = UserItem.EMPTY
     private var mainUserLogin: String = ""
     private var users = arrayListOf<User>()
     private var followers = arrayListOf<User>()
@@ -35,7 +37,6 @@ class UserService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         mainUserLogin = intent?.getStringExtra(Constant.LOGIN) ?: ""
         return START_NOT_STICKY
-
     }
 
     override fun onCreate() {
@@ -61,12 +62,23 @@ class UserService : Service() {
 
     fun loadHead(callback: RefreshCallback) {
         scope.launch {
-            try {
-                val user = retrofit.getUser(mainUserLogin)
-                withContext(Dispatchers.Main) {
-                    callback.refreshHeader(user, resources.getString(R.string.subs_title))
+            while (true) {
+                var secondIfError = 60
+                try {
+                    val user = retrofit.getUser(mainUserLogin)
+                    withContext(Dispatchers.Main) {
+                        callback.refreshHeader(user, resources.getString(R.string.subs_title))
+                    }
+                    return@launch
+                } catch (e: BackendException) {
+                    println("Backend exception with exit code ${e.code}: ${e.message}")
+                } catch (e: ParseBackendException) {
+                    println("Parsed backend exception: ${e.message}")
+                } catch (e: ConnectionException) {
+                    println("Couldn't remote connect: ${e.message}")
                 }
-            } catch (e: Exception) { //todo: logging
+                callback.retry(secondIfError)
+                secondIfError *= 2
             }
         }
     }
@@ -88,6 +100,7 @@ class UserService : Service() {
     private suspend fun request(amount: Int, callback: RefreshCallback, userType: UserType) {
         var loaded = 0
         var page = 1
+        var secondIfError = 60
         while (loaded < amount) {
             try {
                 val container = when (userType) {
@@ -111,9 +124,8 @@ class UserService : Service() {
                     loadImage(root.resolve(user.avatar), user.id)
                 }
                 container.addAll(newUsers)
-                println("SZ: " + container.size)
                 withContext(Dispatchers.Main) {
-                    val from = when(userType) {
+                    val from = when (userType) {
                         UserType.USER -> before
                         UserType.FOLLOWER -> before + 2
                     }
@@ -121,9 +133,15 @@ class UserService : Service() {
                 }
                 page++
                 loaded += minOf(amount, 5)
-            } catch (e: Exception) {
-                throw e//TODO: Logging
+            } catch (e: BackendException) {
+                println("Backend exception with exit code ${e.code}: ${e.message}")
+            } catch (e: ParseBackendException) {
+                println("Parsed backend exception: ${e.message}")
+            } catch (e: ConnectionException) {
+                println("Couldn't remote connect: ${e.message}")
             }
+            callback.retry(secondIfError)
+            secondIfError *= 2
         }
     }
 
@@ -162,6 +180,7 @@ class UserService : Service() {
     interface RefreshCallback {
         fun refresh(from: Int, amount: Int)
         fun refreshHeader(user: UserItem, subs: String)
+        suspend fun retry(times : Int)
     }
 
     override fun onDestroy() {

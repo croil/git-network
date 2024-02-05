@@ -35,7 +35,7 @@ open class RetrofitSource(
             val errorBody = errorAdapter.fromJson(
                 e.response()?.errorBody()?.string()!!
             )!!
-            BackendException(errorBody.error, e.code())
+            BackendException(errorBody.message, e.code())
         } catch (e : Exception) {
             throw ParseBackendException(e)
         }
@@ -44,6 +44,6 @@ open class RetrofitSource(
 
 
     class ErrorResponseBody(
-        val error : String
+        val message : String
     )
 }

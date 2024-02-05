@@ -46,6 +46,10 @@ class UserActivity : BaseActivity() {
             adapter.notifyItemRangeInserted(0,2)
         }
 
+        override suspend fun retry(times: Int) {
+            TODO("Not yet implemented")
+        }
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
