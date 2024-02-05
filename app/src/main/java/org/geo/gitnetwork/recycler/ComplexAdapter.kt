@@ -9,12 +9,14 @@ import org.geo.gitnetwork.exception.UnspecifiedItemTypeException
 import org.geo.gitnetwork.model.User
 import org.geo.gitnetwork.model.UserItem
 import org.geo.gitnetwork.model.UserListener
+import java.io.File
 
 class ComplexAdapter(
+    override val root : File,
     private val userItem: UserItem,
-    override val actionListener : UserListener,
-    override val loadMoreUserCallback: () -> Unit
-) : UserAdapter(actionListener, loadMoreUserCallback) {
+    actionListener: (User) -> Unit,
+    loadMoreUserCallback: () -> Unit
+) : UserAdapter(root, actionListener, loadMoreUserCallback) {
 
 
     companion object {

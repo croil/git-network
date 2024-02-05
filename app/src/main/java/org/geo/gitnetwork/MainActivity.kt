@@ -29,7 +29,7 @@ class MainActivity : BaseActivity() {
             userService = binder
             userService.listen(userListener)
             if (userService.active().compareAndSet(false, true)) {
-                userService.loadUsers(10, refreshUser)
+                userService.loadUsers(20, refreshUser)
             }
         }
 
@@ -43,8 +43,9 @@ class MainActivity : BaseActivity() {
         setContentView(binding.root)
         viewDidLoad()
         adapter = UserAdapter(
+            dataDir,
             { onUserPressed() },
-            { userService.loadUsers(10, refreshUser) }
+            { userService.loadUsers(20, refreshUser) }
         )
         setRecyclerViewOptions(binding.userRecyclerView)
         val serviceIntent = Intent(this, UserService::class.java)

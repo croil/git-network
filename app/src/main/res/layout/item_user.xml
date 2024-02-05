@@ -9,6 +9,7 @@
     android:background="@drawable/user_background_shape"
     android:padding="16dp">
 
+    <!--  -->
 
     <ImageView
         android:id="@+id/avatar"

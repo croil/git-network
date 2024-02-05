@@ -2,6 +2,8 @@ package org.geo.gitnetwork.user.entity
 
 import org.geo.gitnetwork.model.User
 import org.geo.gitnetwork.model.UserItem
+import org.geo.gitnetwork.util.Constant
+import java.io.File
 
 
 //TODO: Moshi converter settings
@@ -30,7 +32,7 @@ data class SpecificUserResponseEntity(
     fun toUser() : User = User(
         id = id,
         login = login,
-        avatar = avatar_url,
+        avatar = Constant.IMAGE_PATH + File.separatorChar + login + ".png",
         subs = followers,
         repos = public_repos
     )

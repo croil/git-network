@@ -1,5 +1,7 @@
 package org.geo.gitnetwork.recycler
 
+import android.annotation.SuppressLint
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,9 +10,12 @@ import androidx.viewbinding.ViewBinding
 import org.geo.gitnetwork.R
 import org.geo.gitnetwork.databinding.ItemUserBinding
 import org.geo.gitnetwork.model.User
-import org.geo.gitnetwork.model.UserListener
+import java.io.File
+import java.nio.file.Path
+
 
 open class UserAdapter(
+    protected open val root : File,
     protected open val userListener : (User) -> Unit,
     protected open val loadMoreUserCallback: () -> Unit
 ) : RecyclerView.Adapter<UserAdapter.ItemViewHolder>(), View.OnClickListener {
@@ -33,18 +38,25 @@ open class UserAdapter(
     override fun getItemCount(): Int = users.size
 
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         println(position)
-        if (position == (0.8 * users.size).toInt()) { // if rest 20% -> load more users
+        if (position > (0.8 * users.size).toInt()) { // if rest 20% -> load more users
             loadMoreUserCallback()
         }
         val user = users[position]
         with(holder.binding as ItemUserBinding) {
             holder.itemView.tag = user
             login.text = user.login
-            subs.text = user.subs.toString()
-            repos.text = user.repos.toString()
-            avatar.setImageResource(R.drawable.ic_user_avatar)
+            subs.text = "${user.subs} подписчиков"
+            repos.text = "${user.repos} репозиториев"
+            val image = this@UserAdapter.root.resolve(user.avatar)
+            if (image.exists()) {
+                val bitmap = BitmapFactory.decodeFile(image.absolutePath)
+                avatar.setImageBitmap(bitmap)
+            } else {
+                avatar.setImageResource(R.drawable.ic_user_avatar)
+            }
         }
     }
 

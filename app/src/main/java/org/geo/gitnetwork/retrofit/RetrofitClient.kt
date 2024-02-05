@@ -11,7 +11,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 object RetrofitClient {
 
-    val source: RetrofitUserSource by lazy {
+    val client: RetrofitUserSource by lazy {
         val moshi = Moshi.Builder().build()
         val config = RetrofitConfig(
             retrofit = createRetrofit(moshi),
@@ -35,8 +35,10 @@ object RetrofitClient {
                 val requestBuilder: Request.Builder = chain.request().newBuilder()
                 requestBuilder
                     .header("Accept", "application/vnd.github+json")
-                    .header("Authorization", "Bearer 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")
                     .header("X-GitHub-Api-Version", "2022-11-28")
+                if (Constant.TOKEN.isNotBlank()) {
+                    requestBuilder.header("Authorization", "Bearer ${Constant.TOKEN}")
+                }
                 return@Interceptor chain.proceed(requestBuilder.build())
             })
             .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
