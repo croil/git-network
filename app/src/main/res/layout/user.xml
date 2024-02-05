@@ -35,9 +35,6 @@
         app:layout_constraintStart_toEndOf="@+id/avatar"
         app:layout_constraintTop_toTopOf="@+id/avatar" />
 
-    <!--TODO: INHERITANCE-->
-
-
     <LinearLayout
         android:id="@+id/subfields"
         android:layout_width="0dp"
@@ -51,57 +48,29 @@
 
         <TextView
             android:id="@+id/company"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_regular"
-            android:gravity="center"
-            android:includeFontPadding="false"
-            android:paddingVertical="2dp"
+            style="@style/user_data_field"
             android:text="@string/default_company_field"
-            android:textColor="@color/subfield_color"
-            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/name" />
 
         <TextView
             android:id="@+id/email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_regular"
-            android:gravity="center"
-            android:includeFontPadding="false"
-            android:paddingVertical="2dp"
+            style="@style/user_data_field"
             android:text="@string/default_email_field"
-            android:textColor="@color/subfield_color"
-            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/company" />
 
         <TextView
             android:id="@+id/blog"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_regular"
-            android:gravity="center"
-            android:includeFontPadding="false"
-            android:paddingVertical="2dp"
+            style="@style/user_data_field"
             android:text="@string/default_blog_field"
-            android:textColor="@color/subfield_color"
-            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/email" />
 
         <TextView
             android:id="@+id/location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_regular"
-            android:gravity="center"
-            android:includeFontPadding="false"
-            android:paddingVertical="2dp"
+            style="@style/user_data_field"
             android:text="@string/default_location_field"
-            android:textColor="@color/subfield_color"
-            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@+id/avatar"
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/blog" />

@@ -20,6 +20,12 @@ interface UserApi {
         @Query("per_page") pages: Int
     ): List<RawUserResponseEntity>
 
+    @GET("/users/{login}/followers")
+    suspend fun getFollowers(
+        @Path("login") login: String,
+        @Query("page") page : Int,
+        @Query("per_page") perPage : Int
+    ) : List<RawUserResponseEntity>
 
     @GET("/users/{login}")
     suspend fun getUser(

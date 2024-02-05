@@ -6,6 +6,7 @@ import org.geo.gitnetwork.model.UserItem
 
 interface UserSource {
     suspend fun getUser(login : String) : UserItem
-    suspend fun getUsers(since : Long, perPage : Int = 30) : List<User>
     suspend fun getUserAvatar(id : Long) : ResponseBody
+    suspend fun getUsers(since : Long, perPage : Int = 30) : List<User>
+    suspend fun getFollowers(login: String, page : Int, perPage: Int = 30) : List<User>
 }

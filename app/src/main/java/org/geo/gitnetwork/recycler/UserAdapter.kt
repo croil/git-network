@@ -5,26 +5,28 @@ import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import org.geo.gitnetwork.R
 import org.geo.gitnetwork.databinding.ItemUserBinding
 import org.geo.gitnetwork.model.User
 import java.io.File
-import java.nio.file.Path
 
 
-open class UserAdapter(
-    protected open val root : File,
-    protected open val userListener : (User) -> Unit,
-    protected open val loadMoreUserCallback: () -> Unit
+class UserAdapter(
+    private val root: File,
+    private val userListener: (User) -> Unit,
+    private val loadMoreUserCallback: () -> Unit
 ) : RecyclerView.Adapter<UserAdapter.ItemViewHolder>(), View.OnClickListener {
 
-
+    private lateinit var holder: ItemViewHolder
     var users: List<User> = emptyList()
         set(newList) {
+            val diffCallback = ItemDiffCallback(field, newList)
+            val diffResult = DiffUtil.calculateDiff(diffCallback)
             field = newList
-            notifyDataSetChanged() //TODO: more efficient way(diffutil)
+            diffResult.dispatchUpdatesTo(this)
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -58,12 +60,12 @@ open class UserAdapter(
                 avatar.setImageResource(R.drawable.ic_user_avatar)
             }
         }
+        this.holder = holder
     }
 
     class ItemViewHolder(var binding: ViewBinding) : RecyclerView.ViewHolder(binding.root)
 
-    override fun onClick(v: View) {
-        val user = v.tag as User
-        userListener.invoke(user)
-    }
+    override fun onClick(v: View) = userListener.invoke(v.tag as User)
+
+    fun position(): Int = holder.bindingAdapterPosition
 }

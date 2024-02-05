@@ -11,4 +11,6 @@
     <string name="default_company_field">{COMPANY}</string>
     <string name="default_email_field">{EMAIL}</string>
     <string name="default_blog_field">{BLOG}</string>
+    <string name="default_sub_field">{count} подписчиков</string>
+    <string name="default_repo_field">{count} репозиториев</string>
 </resources>
